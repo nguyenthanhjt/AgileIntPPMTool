@@ -6,15 +6,16 @@ import { getProjects } from "../actions/projectActions";
 import PropTypes from "prop-types";
 
 class Dashboard extends Component {
-  // Life cycle hook: 
+  // Life cycle hook:
   //this life-cycle hook is basically dictated what needs to happen when we mount the component.
   // Called immediately after a component is mounted. Setting state here will trigger re-rendering.
-    componentDidMount(){
-        this.props.getProjects(); // call getProject() action  from projectActions.js
-    }
+  componentDidMount() {
+    this.props.getProjects(); // call getProject() action  from projectActions.js
+  }
 
-
-    render() {
+  render() {
+    // project list from 
+    const projects = this.props.project.projects;
     return (
       <div className="projects">
         <div className="container">
@@ -25,7 +26,11 @@ class Dashboard extends Component {
               <CreateProjectButton />
               <br />
               <hr />
-              <ProjectItem />
+              // pass props to child component ProjectItem
+              {projects.map((project) => (
+                // key: id of record on DB
+                <ProjectItem key={project.id} project={project} />
+              ))}
             </div>
           </div>
         </div>
@@ -43,6 +48,6 @@ Dashboard.prototypes = {
 const mapStateToProps = (state) => ({
   project: state.project,
 });
-// mapping/connect getProjects() to the store, 
-// and then mount it when loading the component- componentDidMount() 
+// mapping/connect getProjects() to the store,
+// and then mount it when loading the component- componentDidMount()
 export default connect(mapStateToProps, { getProjects })(Dashboard);

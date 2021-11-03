@@ -1,5 +1,5 @@
 // import GET_PROJECTS from types.js
-import { GET_PROJECTS } from "../actions/types";
+import { GET_PROJECT, GET_PROJECTS } from "../actions/types";
 
 const initialState = {
   projects: [], // array object
@@ -13,12 +13,18 @@ export default function getAllProjects(state = initialState, action) {
         // return the state and going to load the projects list
         // with the pay load that getting from the server
         ...state,
-        projects: action.payload, 
+        projects: action.payload,
+      };
+
+    case GET_PROJECT:
+      return {
+        ...state,
+        project: action.payload,
       };
     default:
       return state;
   }
 }
 // this is going to dispatch to the store of redux
-// => how to hook up this reducer into the store 
+// => how to hook up this reducer into the store
 // => bring it to our reducer which is the reducer/index.js: hook
