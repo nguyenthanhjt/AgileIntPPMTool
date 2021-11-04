@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import ProTypes from "prop-types";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { createProject } from "../../actions/projectActions";
 import classNames from "classnames";
@@ -165,8 +165,8 @@ AddProject.propTypes = {
   // Basically telling React that they create project func is a require functions or a required prop type
   // for this component to work properly
   // => this is a setting like a constraints
-  createProject: ProTypes.func.isRequired, // Need to delcare right type: createProject is a function
-  errors: ProTypes.object.isRequired, // errors is a object
+  createProject: PropTypes.func.isRequired, // Need to delcare right type: createProject is a function
+  errors: PropTypes.object.isRequired, // errors is a object
 };
 
 const mapStateToProps = (state) => ({

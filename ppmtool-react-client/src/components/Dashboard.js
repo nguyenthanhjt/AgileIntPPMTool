@@ -26,7 +26,9 @@ class Dashboard extends Component {
               <CreateProjectButton />
               <br />
               <hr />
-              // pass props to child component ProjectItem
+              {
+                // pass props to child component ProjectItem
+              }
               {projects.map((project) => (
                 // key: id of record on DB
                 <ProjectItem key={project.id} project={project} />
