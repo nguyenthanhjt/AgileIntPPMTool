@@ -14,7 +14,7 @@ export const createProject = (project, history) => async dispatch => {
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
-      payload: err.response.data,
+      payload: {}
     });
   }
 };
