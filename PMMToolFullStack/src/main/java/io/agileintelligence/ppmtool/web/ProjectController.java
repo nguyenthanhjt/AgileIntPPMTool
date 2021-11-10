@@ -5,6 +5,7 @@ import io.agileintelligence.ppmtool.services.MapValidationErrorService;
 import io.agileintelligence.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class ProjectController {
     @PostMapping("/update")
     public ResponseEntity<?> updateProject(@Valid @RequestBody Project project) {
         projectService.updateProject(project);
-        return new ResponseEntity<String>("Project with ID '" + project.getProjectIdentifier() + "' was updated.", HttpStatus.OK);
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
     @GetMapping("/{projectId}")

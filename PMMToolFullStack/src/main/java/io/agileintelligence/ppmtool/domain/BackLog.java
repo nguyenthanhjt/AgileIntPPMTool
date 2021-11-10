@@ -1,9 +1,8 @@
 package io.agileintelligence.ppmtool.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 public class BackLog {
@@ -26,9 +25,23 @@ public class BackLog {
     }
 
     // OneToOne with the project: one Project has one Back-log
+    // MappedBy ='project': the same attribute name that we have to give the project object on the BackLog side.
+    // basically Lazy: doesn't load the relationships unless it is explicitly requested, while Eager actually load them all.
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
+    private Project project;
     // Backlog only belong to a specific project
     /* OneTOMany: One BackLog can have one or more ProjectTasks,
     but a ProjectTask at least in the scope of this project, can only belong ot one BackLog*/
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 
     public long getId() {
         return id;

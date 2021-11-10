@@ -36,6 +36,17 @@ public class Project {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date updated_At;
 
+    // One backlog to one project: one project has one backlog
+    // EAGER: that way when we load a project object, then the backlog information is readily, EAGER loads all the relationship
+    /*CascadeType.All: owning side of the relationship, meaning that if  delete the project:
+    then everything that's a child to the project, in this case is going to be the backlog And obviously the project tasks.
+    => everything should go away/deleted whenever I delete a project.
+    <=> But if delete a backlog or anything downstream => It do not affect the Project
+    Every time there's a new project created, it creates the backlog automatically for that project.*/
+    // MappedBy ='project': the same attribute name that we have to give the project object on the BackLog side.
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL , mappedBy = "project")
+    private BackLog backLog;
+
     public Project() {
     }
 
@@ -101,6 +112,14 @@ public class Project {
 
     public void setUpdated_At(Date updated_At) {
         this.updated_At = updated_At;
+    }
+
+    public BackLog getBackLog() {
+        return backLog;
+    }
+
+    public void setBackLog(BackLog backLog) {
+        this.backLog = backLog;
     }
 
     @PrePersist
