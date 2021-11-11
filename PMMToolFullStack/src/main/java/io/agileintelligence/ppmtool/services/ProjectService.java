@@ -6,8 +6,6 @@ import io.agileintelligence.ppmtool.exceptions.ProjectIdException;
 import io.agileintelligence.ppmtool.repository.BacklogRepository;
 import io.agileintelligence.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Locale;
@@ -47,9 +45,8 @@ public class ProjectService {
             throw new ProjectIdException("Project Id '" + project.getProjectIdentifier() + "' does not exists.");
         }
         project.setBackLog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
-        projectRepository.save(project);
 
-        return project;
+        return projectRepository.save(project);
     }
 
     public Project findProjectByIdentifier(String projectId) {

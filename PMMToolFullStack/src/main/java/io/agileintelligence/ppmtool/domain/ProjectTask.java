@@ -1,5 +1,7 @@
 package io.agileintelligence.ppmtool.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
@@ -18,11 +20,18 @@ public class ProjectTask {
     private String status;
     private Integer priority; // group tasks base-on priority
     private Date dueDate;
-    // ManyToOne with BackLog:  a task can be long to one BackLog, and a BackLog can have many tasks
     @Column(updatable = false)
     private String projectIdentifier;
     private Date creat_At;
     private Date update_At;
+
+    // ManyToOne with BackLog:  a task can be long to one BackLog, and a BackLog can have many tasks
+    // CascadeType.REFRESH: Can delete the projectTask that belong to a BackLog => refresh that BackLog and tell us the Project task no longer exist
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "backLog_id", updatable = false, nullable = false)
+    @JsonIgnore // to avoid the issue infinite recursions: De quy vo han
+    private BackLog backLog;
+
     public ProjectTask() {
     }
 
@@ -50,6 +59,14 @@ public class ProjectTask {
                 ", creat_At=" + creat_At +
                 ", update_At=" + update_At +
                 '}';
+    }
+
+    public BackLog getBackLog() {
+        return backLog;
+    }
+
+    public void setBackLog(BackLog backLog) {
+        this.backLog = backLog;
     }
 
     public long getId() {

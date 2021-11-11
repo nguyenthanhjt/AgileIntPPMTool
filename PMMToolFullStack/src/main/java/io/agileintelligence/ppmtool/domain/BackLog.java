@@ -3,9 +3,23 @@ package io.agileintelligence.ppmtool.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class BackLog {
+    // OneToOne with the project: one Project has one Back-log
+    // MappedBy ='project': the same attribute name that we have to give the project object on the BackLog side.
+    // basically Lazy: doesn't load the relationships unless it is explicitly requested, while Eager actually load them all.
+    // Backlog only belong to a specific project
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "project_id", nullable = false)
+    @JsonIgnore
+    private Project project;
+    /* OneTOMany: One BackLog can have one or more ProjectTasks,
+    but a ProjectTask at least in the scope of this project, can only belong ot one BackLog*/
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backLog")
+    private List<ProjectTask> projectTasks = new ArrayList<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,16 +38,13 @@ public class BackLog {
         this.projectIdentifier = projectIdentifier;
     }
 
-    // OneToOne with the project: one Project has one Back-log
-    // MappedBy ='project': the same attribute name that we have to give the project object on the BackLog side.
-    // basically Lazy: doesn't load the relationships unless it is explicitly requested, while Eager actually load them all.
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "project_id", nullable = false)
-    @JsonIgnore
-    private Project project;
-    // Backlog only belong to a specific project
-    /* OneTOMany: One BackLog can have one or more ProjectTasks,
-    but a ProjectTask at least in the scope of this project, can only belong ot one BackLog*/
+    public List<ProjectTask> getProjectTasks() {
+        return projectTasks;
+    }
+
+    public void setProjectTasks(List<ProjectTask> projectTasks) {
+        this.projectTasks = projectTasks;
+    }
 
     public Project getProject() {
         return project;
