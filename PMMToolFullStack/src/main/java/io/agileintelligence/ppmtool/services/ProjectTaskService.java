@@ -32,14 +32,17 @@ public class ProjectTaskService {
         // Update the BackLog Sequence:
         backLogSeq++;
 
+        backLog.setPTSequence(backLogSeq);
+
         // Add seq to the project task
         projectTask.setProjectSequence(projectIdentifier + MINUS + backLogSeq);
         projectTask.setProjectIdentifier(projectIdentifier);
 
+        // In the future we need to projectTask.getPriority == 0 to handle to UI Form
         // Initial priority: when priority is null (low-medium-high => to group task by priority)
-        /*if (projectTask.getPriority() == 0 || projectTask.getPriority() == null) {
+        if (projectTask.getPriority() == null) {
             projectTask.setPriority(3);
-        }*/
+        }
 
         // Initial Status when status is null
         if (null == projectTask.getStatus() || BLANK.equals(projectTask.getStatus())) {
