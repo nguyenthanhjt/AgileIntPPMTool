@@ -1,6 +1,7 @@
 package io.agileintelligence.ppmtool.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -44,7 +45,8 @@ public class Project {
     <=> But if delete a backlog or anything downstream => It do not affect the Project
     Every time there's a new project created, it creates the backlog automatically for that project.*/
     // MappedBy ='project': the same attribute name that we have to give the project object on the BackLog side.
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL , mappedBy = "project")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "project")
+    @JsonIgnore
     private BackLog backLog;
 
     public Project() {

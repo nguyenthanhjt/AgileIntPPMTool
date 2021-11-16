@@ -33,4 +33,11 @@ public class BackLogController {
         return new ResponseEntity<>(projectTask1, HttpStatus.CREATED);
 
     }
+
+    @GetMapping("/{backLog_id}")
+    public Iterable<ProjectTask> getProjectBackLog(@PathVariable String backLog_id) {
+        return projectTaskService.findBackLogById(backLog_id);
+
+    }
+
 }

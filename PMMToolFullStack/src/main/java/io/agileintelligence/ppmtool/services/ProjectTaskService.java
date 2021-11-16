@@ -1,14 +1,14 @@
 package io.agileintelligence.ppmtool.services;
 
-import static io.agileintelligence.ppmtool.constants.CommonCoreContants.MINUS;
-import static io.agileintelligence.ppmtool.constants.CommonCoreContants.BLANK;
-
 import io.agileintelligence.ppmtool.domain.BackLog;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.repository.BacklogRepository;
 import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static io.agileintelligence.ppmtool.constants.CommonCoreContants.BLANK;
+import static io.agileintelligence.ppmtool.constants.CommonCoreContants.MINUS;
 
 @Service
 public class ProjectTaskService {
@@ -51,5 +51,9 @@ public class ProjectTaskService {
 
         return projectTaskRepository.save(projectTask);
 
+    }
+
+    public Iterable<ProjectTask> findBackLogById(String id) {
+        return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 }
