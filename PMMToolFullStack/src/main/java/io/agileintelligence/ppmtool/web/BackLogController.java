@@ -1,7 +1,9 @@
 package io.agileintelligence.ppmtool.web;
 
+import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.services.MapValidationErrorService;
+import io.agileintelligence.ppmtool.services.ProjectService;
 import io.agileintelligence.ppmtool.services.ProjectTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ public class BackLogController {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
+    @Autowired
+    private ProjectService projectService;
+
     @PostMapping("/{projectIdentifier}")
     public ResponseEntity<?> addProjectTaskToBackLog(@Valid @RequestBody ProjectTask projectTask,
                                                      BindingResult bindingResult, @PathVariable String projectIdentifier) {
@@ -31,12 +36,13 @@ public class BackLogController {
         ProjectTask projectTask1 = projectTaskService.addProjectTask(projectIdentifier, projectTask);
 
         return new ResponseEntity<>(projectTask1, HttpStatus.CREATED);
-
     }
 
-    @GetMapping("/{backLog_id}")
-    public Iterable<ProjectTask> getProjectBackLog(@PathVariable String backLog_id) {
-        return projectTaskService.findBackLogById(backLog_id);
+    @GetMapping("/{projectIdentifier}")
+    public Iterable<ProjectTask> getProjectBackLog(@PathVariable String projectIdentifier) {
+        Project project = projectService.findProjectByIdentifier(projectIdentifier);
+
+        return projectTaskService.findBackLogById(project.getProjectIdentifier());
 
     }
 

@@ -2,6 +2,7 @@ package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.domain.BackLog;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
+import io.agileintelligence.ppmtool.exceptions.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repository.BacklogRepository;
 import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,14 @@ public class ProjectTaskService {
     private BacklogRepository backlogRepository;
 
     public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
-        // Exceptions: Project not found
 
         // PTs to be added to a specific Project, project != null: existed project and BackLog also exists
         BackLog backLog = backlogRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
 
+        // Exceptions: Project not found
+        if (backLog == null) {
+            throw new ProjectNotFoundException("Project with ID: " + projectIdentifier + " not found.");
+        }
         // set the BackLog to the ProjectTask: => projectSequence ???
         projectTask.setBackLog(backLog);
 
@@ -50,6 +54,7 @@ public class ProjectTaskService {
         }
 
         return projectTaskRepository.save(projectTask);
+
 
     }
 
