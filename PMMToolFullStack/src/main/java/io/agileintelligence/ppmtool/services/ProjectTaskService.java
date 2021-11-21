@@ -2,6 +2,7 @@ package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.domain.BackLog;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
+import io.agileintelligence.ppmtool.exceptions.ApplicationCheckedException;
 import io.agileintelligence.ppmtool.exceptions.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repository.BacklogRepository;
 import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
@@ -60,5 +61,27 @@ public class ProjectTaskService {
 
     public Iterable<ProjectTask> findBackLogById(String id) {
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
+    }
+
+    public ProjectTask findProjectTaskByProjectSequence(String backLogID, String projectSequenceID) {
+        // Ensure: searching on the right backlog
+        BackLog backLog = backlogRepository.findByProjectIdentifier(backLogID);
+        if (null == backLog) {
+            throw new ProjectNotFoundException(" Project with ID : '" + backLogID + "' does not exist.");
+        }
+
+        // make sure that our project task exists
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(projectSequenceID);
+        if (null == projectTask) {
+            throw new ProjectNotFoundException(" Project task with ID '" + projectSequenceID + "' do not exist");
+        }
+
+        // make sure that the backlog/project id in the path corresponds to the right project
+        if (!projectTask.getBackLog().getProjectIdentifier().equals(backLog.getProjectIdentifier())) {
+            throw new ApplicationCheckedException(" Project Task with ID '" + projectSequenceID + "' do not exist in Project with ID '" + backLogID + "'");
+        }
+
+
+        return projectTask;
     }
 }

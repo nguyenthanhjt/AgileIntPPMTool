@@ -46,4 +46,13 @@ public class BackLogController {
 
     }
 
+    @GetMapping("/{backLogID}/{projectTaskID}")
+    public ResponseEntity<?> getProjectTask(@PathVariable String backLogID, @PathVariable String projectTaskID) {
+
+        ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backLogID, projectTaskID);
+
+        return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
+
+    }
+
 }

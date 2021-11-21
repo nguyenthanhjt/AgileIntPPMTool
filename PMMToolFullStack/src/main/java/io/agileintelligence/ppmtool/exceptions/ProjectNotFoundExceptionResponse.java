@@ -1,17 +1,17 @@
 package io.agileintelligence.ppmtool.exceptions;
 
 public class ProjectNotFoundExceptionResponse {
-    private String ERROR_MESSAGE;
+    private String errorMessage;
 
     public ProjectNotFoundExceptionResponse(String message) {
-        this.ERROR_MESSAGE = message;
+        this.errorMessage = message;
     }
 
     public String getMessage() {
-        return ERROR_MESSAGE;
+        return errorMessage;
     }
 
     public void setMessage(String message) {
-        this.ERROR_MESSAGE = message;
+        this.errorMessage = message;
     }
 }

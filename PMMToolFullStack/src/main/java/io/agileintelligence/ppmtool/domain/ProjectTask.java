@@ -12,7 +12,7 @@ public class ProjectTask {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     // this field cannot be updated, cannot be duplicated but this will be auto-generated => not update
-    @Column(updatable = false)
+    @Column(updatable = false, unique = true)
     private String projectSequence;
     @NotBlank(message = " Please include a project summary")
     private String summary;
