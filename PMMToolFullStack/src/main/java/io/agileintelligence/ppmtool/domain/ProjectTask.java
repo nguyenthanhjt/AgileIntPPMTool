@@ -11,19 +11,23 @@ public class ProjectTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     // this field cannot be updated, cannot be duplicated but this will be auto-generated => not update
     @Column(updatable = false, unique = true)
     private String projectSequence;
+
     @NotBlank(message = " Please include a project summary")
     private String summary;
+
+    @Column(updatable = false)
+    private String projectIdentifier;
+
     private String acceptanceCriteria;
     private String status;
     private Integer priority; // group tasks base-on priority
     private Date dueDate;
-    @Column(updatable = false)
-    private String projectIdentifier;
-    private Date creat_At;
-    private Date update_At;
+    private Date creatAt;
+    private Date updateAt;
 
     // ManyToOne with BackLog:  a task can be long to one BackLog, and a BackLog can have many tasks
     // CascadeType.REFRESH: Can delete the projectTask that belong to a BackLog => refresh that BackLog and tell us the Project task no longer exist
@@ -32,17 +36,14 @@ public class ProjectTask {
     @JsonIgnore // to avoid the issue infinite recursions: De quy vo han
     private BackLog backLog;
 
-    public ProjectTask() {
-    }
-
     @PrePersist
     protected void onCreate() {
-        this.creat_At = new Date();
+        this.creatAt = new Date();
     }
 
     @PreUpdate
     protected void onUpdate() {
-        this.update_At = new Date();
+        this.updateAt = new Date();
     }
 
     @Override
@@ -56,8 +57,8 @@ public class ProjectTask {
                 ", priority=" + priority +
                 ", dueDate=" + dueDate +
                 ", projectIdentifier='" + projectIdentifier + '\'' +
-                ", creat_At=" + creat_At +
-                ", update_At=" + update_At +
+                ", creat_At=" + creatAt +
+                ", update_At=" + updateAt +
                 '}';
     }
 
@@ -133,19 +134,19 @@ public class ProjectTask {
         this.projectIdentifier = projectIdentifier;
     }
 
-    public Date getCreat_At() {
-        return creat_At;
+    public Date getCreatAt() {
+        return creatAt;
     }
 
-    public void setCreat_At(Date creat_At) {
-        this.creat_At = creat_At;
+    public void setCreatAt(Date creatAt) {
+        this.creatAt = creatAt;
     }
 
-    public Date getUpdate_At() {
-        return update_At;
+    public Date getUpdateAt() {
+        return updateAt;
     }
 
-    public void setUpdate_At(Date update_At) {
-        this.update_At = update_At;
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

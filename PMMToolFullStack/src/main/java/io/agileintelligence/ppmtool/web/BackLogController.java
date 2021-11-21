@@ -28,9 +28,9 @@ public class BackLogController {
     private ProjectService projectService;
 
     @PostMapping("/{projectIdentifier}")
-    public ResponseEntity<?> addProjectTaskToBackLog(@Valid @RequestBody ProjectTask projectTask,
-                                                     BindingResult bindingResult, @PathVariable String projectIdentifier) {
-        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(bindingResult);
+    public ResponseEntity<Object> addProjectTaskToBackLog(@Valid @RequestBody ProjectTask projectTask,
+                                                          BindingResult bindingResult, @PathVariable String projectIdentifier) {
+        ResponseEntity<Object> errorMap = mapValidationErrorService.validateError(bindingResult);
         if (errorMap != null) return errorMap;
 
         ProjectTask projectTask1 = projectTaskService.addProjectTask(projectIdentifier, projectTask);
@@ -47,12 +47,24 @@ public class BackLogController {
     }
 
     @GetMapping("/{backLogID}/{projectTaskID}")
-    public ResponseEntity<?> getProjectTask(@PathVariable String backLogID, @PathVariable String projectTaskID) {
+    public ResponseEntity<Object> getProjectTask(@PathVariable String backLogID, @PathVariable String projectTaskID) {
 
         ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backLogID, projectTaskID);
 
-        return new ResponseEntity<ProjectTask>(projectTask, HttpStatus.OK);
+        return new ResponseEntity<>(projectTask, HttpStatus.OK);
 
     }
 
+    @PatchMapping("/{projectID}/{projectTaskSeq}")
+    public ResponseEntity<Object> updateProjectTask(@RequestBody ProjectTask projectTask, BindingResult result,
+                                                    @PathVariable String projectID, @PathVariable String projectTaskSeq) {
+
+        ResponseEntity<Object> errorMap = mapValidationErrorService.validateError(result);
+        if (null != errorMap) return errorMap;
+
+        ProjectTask updatedTask = projectTaskService.updateProjectTaskByProjectSequence(projectTask, projectID, projectTaskSeq);
+
+        return new ResponseEntity<>(updatedTask, HttpStatus.OK);
+
+    }
 }

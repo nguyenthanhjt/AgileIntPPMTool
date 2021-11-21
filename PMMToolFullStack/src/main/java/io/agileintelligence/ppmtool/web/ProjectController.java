@@ -5,7 +5,6 @@ import io.agileintelligence.ppmtool.services.MapValidationErrorService;
 import io.agileintelligence.ppmtool.services.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +26,11 @@ public class ProjectController {
     @PostMapping("")
     public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult result) {
 
-        ResponseEntity<?> errorMap = validationErrorService.MapValidationService(result);
+        ResponseEntity<?> errorMap = validationErrorService.validateError(result);
         if (errorMap != null) return errorMap;
 
-        Project project1 = projectService.saveOrUpdateProject(project);
-        return new ResponseEntity<>(project1, HttpStatus.CREATED);
+        Project updatedProject = projectService.saveOrUpdateProject(project);
+        return new ResponseEntity<>(updatedProject, HttpStatus.CREATED);
     }
 
     @PostMapping("/update")
