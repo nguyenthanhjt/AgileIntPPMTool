@@ -67,4 +67,11 @@ public class BackLogController {
         return new ResponseEntity<>(updatedTask, HttpStatus.OK);
 
     }
+
+    @DeleteMapping("/{projectID}/{projectTaskSeq}")
+    public ResponseEntity<Object> deleteProjectTask(@PathVariable String projectID, @PathVariable String projectTaskSeq) {
+        projectTaskService.deleteProjectTaskByProjectSequence(projectID, projectTaskSeq);
+
+        return new ResponseEntity<>("Project task '" + projectTaskSeq + "' was deleted successfully.", HttpStatus.OK);
+    }
 }

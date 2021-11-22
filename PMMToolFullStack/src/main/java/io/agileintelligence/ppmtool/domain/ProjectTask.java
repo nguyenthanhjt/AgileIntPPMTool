@@ -32,7 +32,7 @@ public class ProjectTask {
     // ManyToOne with BackLog:  a task can be long to one BackLog, and a BackLog can have many tasks
     // CascadeType.REFRESH: Can delete the projectTask that belong to a BackLog => refresh that BackLog and tell us the Project task no longer exist
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "backLog_id", updatable = false, nullable = false)
+    @JoinColumn(name = "backLogId", updatable = false, nullable = false)
     @JsonIgnore // to avoid the issue infinite recursions: De quy vo han
     private BackLog backLog;
 

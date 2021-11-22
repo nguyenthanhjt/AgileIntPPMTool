@@ -9,6 +9,8 @@ import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static io.agileintelligence.ppmtool.constants.CommonCoreContants.BLANK;
 import static io.agileintelligence.ppmtool.constants.CommonCoreContants.MINUS;
 
@@ -63,7 +65,7 @@ public class ProjectTaskService {
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
-    public ProjectTask findProjectTaskByProjectSequence(String projectID, String projectSequenceID) {
+    public ProjectTask findProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID) {
         // Ensure: searching on the right backlog
         BackLog backLog = backlogRepository.findByProjectIdentifier(projectID);
         if (null == backLog) {
@@ -71,23 +73,35 @@ public class ProjectTaskService {
         }
 
         // make sure that our project task exists
-        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(projectSequenceID);
+        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(projectTaskSequenceID);
         if (null == projectTask) {
-            throw new ProjectNotFoundException(" Project task with ID '" + projectSequenceID + "' do not exist");
+            throw new ProjectNotFoundException(" Project task with ID '" + projectTaskSequenceID + "' do not exist");
         }
 
         // make sure that the backlog/project id in the path corresponds to the right project
         if (!projectTask.getBackLog().getProjectIdentifier().equals(backLog.getProjectIdentifier())) {
-            throw new ApplicationCheckedException(" Project Task with ID '" + projectSequenceID + "' do not exist in Project with ID '" + projectID + "'");
+            throw new ApplicationCheckedException(" Project Task with ID '" + projectTaskSequenceID + "' do not exist in Project with ID '" + projectID + "'");
         }
 
 
         return projectTask;
     }
 
-    public ProjectTask updateProjectTaskByProjectSequence(ProjectTask updatedProjectTask, String backLogID, String projectSequenceID) {
-        ProjectTask projectTask = projectTaskRepository.findByProjectSequence(projectSequenceID);
+    public ProjectTask updateProjectTaskByProjectSequence(ProjectTask updatedProjectTask, String projectID, String projectTaskSequenceID) {
+        // Validation: exist and consistency
+        findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
 
         return projectTaskRepository.save(updatedProjectTask);
+    }
+
+    public void deleteProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID) {
+        // Validation:
+        ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
+
+        List<ProjectTask> projectTaskList = projectTask.getBackLog().getProjectTasks();
+        projectTaskList.remove(projectTask);
+        // backlogRepository.save(backLog);
+
+        projectTaskRepository.deleteById(projectTask.getId());
     }
 }
