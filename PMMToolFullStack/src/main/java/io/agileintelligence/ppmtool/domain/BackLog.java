@@ -18,7 +18,9 @@ public class BackLog {
     private Project project;
     /* OneTOMany: One BackLog can have one or more ProjectTasks,
     but a ProjectTask at least in the scope of this project, can only belong ot one BackLog*/
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backLog")
+    // Change CascadeType.ALL => REFRESH
+    //
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backLog", orphanRemoval = true)
     private List<ProjectTask> projectTasks = new ArrayList<>();
 
     @Id

@@ -98,8 +98,8 @@ public class ProjectTaskService {
         // Validation:
         ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
 
-        List<ProjectTask> projectTaskList = projectTask.getBackLog().getProjectTasks();
-        projectTaskList.remove(projectTask);
+        // List<ProjectTask> projectTaskList = projectTask.getBackLog().getProjectTasks();
+        // projectTaskList.remove(projectTask);
         // backlogRepository.save(backLog);
 
         projectTaskRepository.deleteById(projectTask.getId());
