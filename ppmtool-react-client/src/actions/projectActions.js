@@ -9,7 +9,7 @@ export const createProject = (project, history) => async (dispatch) => {
 
   // handle error
   try {
-    const res = await axios.post("/api/project", project); // pass a valid project object
+    await axios.post("/api/project", project); // pass a valid project object
     history.push("/dashboard"); // redirect to dashboard to see the result
   } catch (err) {
     dispatch({
@@ -48,7 +48,7 @@ export const deleteProject = (id) => async (dispatch) => {
     )
   ) {
     try {
-      const res = await axios.delete(`/api/project/${id}`);
+      await axios.delete(`/api/project/${id}`);
       dispatch({
         type: DELETE_PROJECT,
         payload: id,
