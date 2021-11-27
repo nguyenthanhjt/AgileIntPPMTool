@@ -42,7 +42,7 @@ public class BackLogController {
     public Iterable<ProjectTask> getProjectBackLog(@PathVariable String projectIdentifier) {
         Project project = projectService.findProjectByIdentifier(projectIdentifier);
 
-        return projectTaskService.findBackLogById(project.getProjectIdentifier());
+        return projectTaskService.findBackLogByProjectID(project.getProjectIdentifier());
 
     }
 
