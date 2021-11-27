@@ -1,11 +1,11 @@
 import axios from "axios";
-import { GET_ERRORS } from "./types";
+import { GET_ERRORS, GET_PROJECT_TASK, GET_BACKLOG } from "./types";
 
 export const addProjectTask =
-  (backLogID, projectTask, history) => async (dispatch) => {
+  (projectID, projectTask, history) => async (dispatch) => {
     try {
-      await axios.post(`/api/backlog/${backLogID}`, projectTask);
-      history.push(`/projectBoard/${backLogID}`);
+      await axios.post(`/api/backlog/${projectID}`, projectTask);
+      history.push(`/projectBoard/${projectID}`);
       dispatch({
         type: GET_ERRORS,
         payload: {},
@@ -17,3 +17,16 @@ export const addProjectTask =
       });
     }
   };
+
+  export const getBackLog = (projectID) => async dispatch => {
+    try {
+      const response = await axios.get(`/api/backlog/${projectID}`);
+      dispatch({
+        type: GET_BACKLOG,
+        payload: response.data
+      })
+    } catch (error) {
+      //history.push("/project")
+      
+    }
+  }
