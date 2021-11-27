@@ -9,8 +9,6 @@ import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 import static io.agileintelligence.ppmtool.constants.CommonCoreContants.BLANK;
 import static io.agileintelligence.ppmtool.constants.CommonCoreContants.MINUS;
 
@@ -61,7 +59,7 @@ public class ProjectTaskService {
 
     }
 
-    public Iterable<ProjectTask> findBackLogById(String id) {
+    public Iterable<ProjectTask> findBackLogByProjectID(String id) {
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
@@ -97,10 +95,6 @@ public class ProjectTaskService {
     public void deleteProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID) {
         // Validation:
         ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
-
-        // List<ProjectTask> projectTaskList = projectTask.getBackLog().getProjectTasks();
-        // projectTaskList.remove(projectTask);
-        // backlogRepository.save(backLog);
 
         projectTaskRepository.deleteById(projectTask.getId());
     }
