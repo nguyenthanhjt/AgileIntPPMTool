@@ -1,18 +1,32 @@
 import React, { Component } from "react";
 
- class ProjectTask extends Component {
+class ProjectTask extends Component {
   render() {
-    const {projectTask} = this.props;
+    const { projectTask } = this.props;
+    let priorityString;
+    let priorityClass;
+
+    if (projectTask.priority === 1) {
+      // change style to a boostrap danger class
+      priorityClass = "bg-danger text-light";
+      priorityString = "HIGH";
+    } else if (projectTask.priority === 2) {
+      // change style to a boostrap warning class
+      priorityClass = "bg-warning text-light";
+      priorityString = "MEDIUM";
+    } else if (projectTask.priority === 3) {
+      // change style to a boostrap danger class
+      priorityClass = "bg-info text-light";
+      priorityString = "LOW";
+    }
 
     return (
       <div className="card mb-1 bg-light">
-        <div className="card-header text-primary">
-          <p className="ds"><b>ID:{projectTask.projectSequence}</b></p>
+        <div className={`card-header text-primary ${priorityClass}`}>
           <p className="ds">
-          Priority: {projectTask.priority}
+            ID: <b>{projectTask.projectSequence}</b> {" -- "}
+            Priority: <b>{priorityString}</b>
           </p>
-          
-          
         </div>
         <div className="card-body bg-light">
           <h5 className="card-title">{projectTask.summary}</h5>
