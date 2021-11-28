@@ -14,7 +14,9 @@ class ProjectBoard extends Component {
   }
 
   render() {
+    // use JS Destructuring
     const { id } = this.props.match.params;
+    const {projectTasks} = this.props.backlog;
     return (
       <div className="container">
         <Link to={`/addProjectTask/${id}`} className="btn btn-primary mb-3">
@@ -22,7 +24,7 @@ class ProjectBoard extends Component {
         </Link>
         <br />
         <hr />
-        <BackLog />
+        <BackLog projectTaskList={projectTasks}/>
       </div>
     );
   }
