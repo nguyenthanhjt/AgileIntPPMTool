@@ -1,17 +1,17 @@
 package io.agileintelligence.ppmtool.exceptions;
 
 public class ProjectIdExceptionResponse {
-    private String projectIdentifier;
+    private String error;
 
-    public ProjectIdExceptionResponse(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public ProjectIdExceptionResponse(String error) {
+        this.error = error;
     }
 
-    public String getProjectIdentifier() {
-        return projectIdentifier;
+    public String getError() {
+        return error;
     }
 
-    public void setProjectIdentifier(String projectIdentifier) {
-        this.projectIdentifier = projectIdentifier;
+    public void setError(String error) {
+        this.error = error;
     }
 }

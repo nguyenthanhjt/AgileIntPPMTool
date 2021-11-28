@@ -27,6 +27,9 @@ export const addProjectTask =
       })
     } catch (error) {
       //history.push("/project")
-      
+      dispatch({
+        type: GET_ERRORS,
+        payload: error.response.data
+      })
     }
   }

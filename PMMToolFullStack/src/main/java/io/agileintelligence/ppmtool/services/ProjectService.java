@@ -3,6 +3,7 @@ package io.agileintelligence.ppmtool.services;
 import io.agileintelligence.ppmtool.domain.BackLog;
 import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.exceptions.ProjectIdException;
+import io.agileintelligence.ppmtool.exceptions.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repository.BacklogRepository;
 import io.agileintelligence.ppmtool.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class ProjectService {
     public Project findProjectByIdentifier(String projectId) {
         Project project = projectRepository.findByProjectIdentifier(projectId.toUpperCase(Locale.ROOT));
         if (project == null) {
-            throw new ProjectIdException("Project Id '" + projectId + "' does not exists.");
+            throw new ProjectNotFoundException("Project ID '" + projectId + "' does not exists.");
         }
 
         return project;
