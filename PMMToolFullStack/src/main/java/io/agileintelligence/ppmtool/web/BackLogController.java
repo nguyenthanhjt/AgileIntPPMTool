@@ -14,8 +14,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api/backlog")
-@CrossOrigin
+@RequestMapping(value = "/api/backlog",
+        method = {RequestMethod.DELETE,
+                RequestMethod.POST,
+                RequestMethod.GET,
+                RequestMethod.PUT,
+                RequestMethod.PATCH
+        })
+@CrossOrigin(origins = "http://localhost:3000")
 public class BackLogController {
 
     @Autowired
@@ -38,7 +44,7 @@ public class BackLogController {
         return new ResponseEntity<>(projectTask1, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{projectIdentifier}")
+    @GetMapping("/get-backlog/{projectIdentifier}")
     public Iterable<ProjectTask> getProjectBackLog(@PathVariable String projectIdentifier) {
         Project project = projectService.findProjectByIdentifier(projectIdentifier);
 
@@ -46,7 +52,7 @@ public class BackLogController {
 
     }
 
-    @GetMapping("/{backLogID}/{projectTaskID}")
+    @GetMapping("/get-project-task/{backLogID}/{projectTaskID}")
     public ResponseEntity<Object> getProjectTask(@PathVariable String backLogID, @PathVariable String projectTaskID) {
 
         ProjectTask projectTask = projectTaskService.findProjectTaskByProjectSequence(backLogID, projectTaskID);
@@ -55,7 +61,7 @@ public class BackLogController {
 
     }
 
-    @PatchMapping("/{projectID}/{projectTaskSeq}")
+    @PatchMapping(value = "/{projectID}/{projectTaskSeq}", produces = "application/json")
     public ResponseEntity<Object> updateProjectTask(@RequestBody ProjectTask projectTask, BindingResult result,
                                                     @PathVariable String projectID, @PathVariable String projectTaskSeq) {
 
@@ -68,7 +74,7 @@ public class BackLogController {
 
     }
 
-    @DeleteMapping("/{projectID}/{projectTaskSeq}")
+    @DeleteMapping("/delete/{projectID}/{projectTaskSeq}")
     public ResponseEntity<Object> deleteProjectTask(@PathVariable String projectID, @PathVariable String projectTaskSeq) {
         projectTaskService.deleteProjectTaskByProjectSequence(projectID, projectTaskSeq);
 

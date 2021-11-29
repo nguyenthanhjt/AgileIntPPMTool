@@ -43,7 +43,7 @@ public class ProjectController {
     public ResponseEntity<?> getProjectById(@PathVariable String projectId) {
         Project project = projectService.findProjectByIdentifier(projectId);
 
-        return new ResponseEntity<Project>(project, HttpStatus.OK);
+        return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
     @GetMapping("/all")
@@ -51,9 +51,9 @@ public class ProjectController {
         return projectService.findAllProjects();
     }
 
-    @DeleteMapping("/{projectId}")
+    @DeleteMapping("/delete/{projectId}")
     public ResponseEntity<?> deleteProjectById(@PathVariable String projectId) {
         projectService.deleteProjectById(projectId);
-        return new ResponseEntity<String>("Project with Id: '" + projectId + "' was deleted.", HttpStatus.OK);
+        return new ResponseEntity<>("Project with Id: '" + projectId + "' was deleted.", HttpStatus.OK);
     }
 }
