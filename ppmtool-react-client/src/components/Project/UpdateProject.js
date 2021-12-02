@@ -7,8 +7,8 @@ import classnames from "classnames";
 
 class UpdateProject extends Component {
   // set state
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       id: "",

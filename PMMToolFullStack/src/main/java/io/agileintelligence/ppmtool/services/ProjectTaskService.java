@@ -87,7 +87,9 @@ public class ProjectTaskService {
 
     public ProjectTask updateProjectTaskByProjectSequence(ProjectTask updatedProjectTask, String projectID, String projectTaskSequenceID) {
         // Validation: exist and consistency
-        findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
+        ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
+        updatedProjectTask.setId(projectTask.getId());
+        updatedProjectTask.setBackLog(projectTask.getBackLog());
 
         return projectTaskRepository.save(updatedProjectTask);
     }

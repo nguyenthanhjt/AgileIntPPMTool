@@ -48,7 +48,7 @@ export const deleteProject = (id) => async (dispatch) => {
     )
   ) {
     try {
-      await axios.delete(`/api/project/${id}`);
+      await axios.delete(`/api/project/delete/${id}`);
       dispatch({
         type: DELETE_PROJECT,
         payload: id,
