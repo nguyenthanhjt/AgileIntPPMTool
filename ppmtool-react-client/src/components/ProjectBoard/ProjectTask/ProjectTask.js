@@ -37,8 +37,7 @@ class ProjectTask extends Component {
           <Link
             to={`/update-project-task/${projectTask.projectIdentifier}/${projectTask.projectSequence}`}
             className="btn btn-primary"
-          >
-            View / Update
+          >Update
           </Link>
           <button className="btn btn-danger ml-4">Delete</button>
         </div>

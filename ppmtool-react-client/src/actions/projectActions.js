@@ -11,10 +11,14 @@ export const createProject = (project, history) => async (dispatch) => {
   try {
     await axios.post("/api/project", project); // pass a valid project object
     history.push("/dashboard"); // redirect to dashboard to see the result
-  } catch (err) {
     dispatch({
       type: GET_ERRORS,
       payload: {},
+    });
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data,
     });
   }
 };

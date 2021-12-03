@@ -24,15 +24,18 @@ export const updateProjectTask =
         `/api/backlog/${projectID}/${projectTaskSeq}`,
         projectTask
       );
+
       history.push(`/projectBoard/${projectID}`);
+
       dispatch({
         type: GET_ERRORS,
-        payload: {},
+        payload: {}
       });
-    } catch (error) {
+
+    } catch (err) {
       dispatch({
         type: GET_ERRORS,
-        payload: error.response.data,
+        payload: err.response.data
       });
     }
   };
@@ -64,6 +67,7 @@ export const getProjectTask =
         payload: response.data,
       });
     } catch (error) {
-      history.push("/projectBoard");
+      //history.push(`/projectBoard/${projectID}`);
+      history.push(`/dashboard/${projectID}`);
     }
   };

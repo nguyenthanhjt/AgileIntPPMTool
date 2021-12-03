@@ -1,31 +1,28 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import classNames from "classnames";
+import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import {
   updateProjectTask,
   getProjectTask,
 } from "../../../actions/backlogActions";
-import e from "cors";
 import Moment from "moment";
 
 class UpdateProjectTask extends Component {
-  constructor(props) {
-    super(props);
-
-    const { projectID } = this.props.match.params;
+  constructor() {
+    super();
 
     this.state = {
+      id: "",
       projectSequence: "",
       summary: "",
       acceptanceCriteria: "",
       status: "",
-      priority: 0,
+      priority: "",
       dueDate: "",
-      projectIdentifier: projectID,
-      creat_At: "",
-      update_At: "",
+      projectIdentifier: "",
+      createAt: "",
       errors: {},
     };
 
@@ -35,6 +32,7 @@ class UpdateProjectTask extends Component {
 
   componentWillReceiveProps(nextProps) {
     const {
+      id,
       projectSequence,
       summary,
       acceptanceCriteria,
@@ -42,11 +40,11 @@ class UpdateProjectTask extends Component {
       priority,
       dueDate,
       projectIdentifier,
-      creat_At,
-      update_At,
+      createAt,
     } = nextProps.projectTask;
 
     this.setState({
+      id,
       projectSequence,
       summary,
       acceptanceCriteria,
@@ -54,8 +52,7 @@ class UpdateProjectTask extends Component {
       priority,
       dueDate,
       projectIdentifier,
-      creat_At,
-      update_At,
+      createAt,
     });
 
     if (nextProps.errors) {
@@ -79,27 +76,28 @@ class UpdateProjectTask extends Component {
     e.preventDefault();
 
     const updateProjectTask = {
+      id: this.state.id,
       projectSequence: this.state.projectSequence,
       summary: this.state.summary,
       acceptanceCriteria: this.state.acceptanceCriteria,
       status: this.state.status,
       priority: this.state.priority,
       dueDate: this.state.dueDate,
-      projectIdentifier: this.state.projectIdentifier
+      projectIdentifier: this.state.projectIdentifier,
+      createAt: this.state.createAt,
     };
 
     this.props.updateProjectTask(
-      this.props.match.params.projectID,
-      this.props.projectTask.projectSequence,
+      this.props.match.params.projectID, // this.state.projectIdentifier,
+      this.props.projectTask.projectSequence, // this.state.projectSequence,
       updateProjectTask,
       this.props.history
     );
   }
 
   render() {
-    const { errors } = this.props;
+    const { errors } = this.state;
     const { projectID } = this.props.match.params;
-    const { projectTask } = this.props;
 
     return (
       <div className="add-PBI">
@@ -115,7 +113,7 @@ class UpdateProjectTask extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className={classNames("form-control form-control-lg", {
+                    className={classnames("form-control form-control-lg", {
                       "is-invalid": errors.summary,
                     })}
                     name="summary"
@@ -129,7 +127,7 @@ class UpdateProjectTask extends Component {
                 </div>
                 <div className="form-group">
                   <textarea
-                    className={classNames("form-control form-control-lg", {
+                    className={classnames("form-control form-control-lg", {
                       "is-invalid": errors.acceptanceCriteria,
                     })}
                     placeholder="Acceptance Criteria"
@@ -149,7 +147,7 @@ class UpdateProjectTask extends Component {
                     type="date"
                     className="form-control form-control-lg"
                     name="dueDate"
-                    value={Moment(this.state.dueDate).format('YYYY-MM-DD')}
+                    value={Moment(this.state.dueDate).format("YYYY-MM-DD")}
                     onChange={this.onChange}
                   />
                 </div>
@@ -204,12 +202,12 @@ UpdateProjectTask.propTypes = {
   projectTask: PropTypes.object.isRequired,
   getProjectTask: PropTypes.func.isRequired,
   updateProjectTask: PropTypes.func.isRequired,
-  errors: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state) => ({
   projectTask: state.backlog.projectTask,
-  errors: state.errors,
+  errors: state.errors
 });
 export default connect(mapStateToProps, { getProjectTask, updateProjectTask })(
   UpdateProjectTask
