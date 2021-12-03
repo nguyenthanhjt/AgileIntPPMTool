@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -16,7 +17,8 @@ public class ProjectTask {
     @Column(updatable = false, unique = true)
     private String projectSequence;
 
-    @NotBlank(message = " Please include a project summary")
+    @NotBlank(message = " Please include a project summary.")
+    @NotEmpty(message = "Summary can not be empty.")
     private String summary;
 
     @Column(updatable = false)
@@ -26,7 +28,7 @@ public class ProjectTask {
     private String status;
     private Integer priority; // group tasks base-on priority
     private Date dueDate;
-    private Date creatAt;
+    private Date createAt;
     private Date updateAt;
 
     // ManyToOne with BackLog:  a task can be long to one BackLog, and a BackLog can have many tasks
@@ -39,7 +41,7 @@ public class ProjectTask {
 
     @PrePersist
     protected void onCreate() {
-        this.creatAt = new Date();
+        this.createAt = new Date();
     }
 
     @PreUpdate
@@ -58,7 +60,7 @@ public class ProjectTask {
                 ", priority=" + priority +
                 ", dueDate=" + dueDate +
                 ", projectIdentifier='" + projectIdentifier + '\'' +
-                ", creat_At=" + creatAt +
+                ", creat_At=" + createAt +
                 ", update_At=" + updateAt +
                 '}';
     }
@@ -135,12 +137,12 @@ public class ProjectTask {
         this.projectIdentifier = projectIdentifier;
     }
 
-    public Date getCreatAt() {
-        return creatAt;
+    public Date getCreateAt() {
+        return createAt;
     }
 
-    public void setCreatAt(Date creatAt) {
-        this.creatAt = creatAt;
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
     }
 
     public Date getUpdateAt() {
@@ -150,4 +152,5 @@ public class ProjectTask {
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
     }
+
 }

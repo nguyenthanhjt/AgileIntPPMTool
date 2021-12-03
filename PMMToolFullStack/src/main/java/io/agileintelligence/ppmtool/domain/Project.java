@@ -16,7 +16,6 @@ public class Project {
     private Long id;
 
     @NotBlank(message = "Project name is required")
-    @org.hibernate.validator.constraints.NotBlank
     private String projectName;
 
     @NotBlank(message = "Project Identifier is required")

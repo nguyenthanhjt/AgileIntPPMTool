@@ -34,9 +34,9 @@ public class BackLogController {
     private ProjectService projectService;
 
     @PostMapping("/{projectIdentifier}")
-    public ResponseEntity<Object> addProjectTaskToBackLog(@Valid @RequestBody ProjectTask projectTask,
-                                                          BindingResult bindingResult, @PathVariable String projectIdentifier) {
-        ResponseEntity<Object> errorMap = mapValidationErrorService.validateError(bindingResult);
+    public ResponseEntity<?> addProjectTaskToBackLog(@Valid @RequestBody ProjectTask projectTask,
+                                                     BindingResult bindingResult, @PathVariable String projectIdentifier) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.validateError(bindingResult);
         if (errorMap != null) return errorMap;
 
         ProjectTask projectTask1 = projectTaskService.addProjectTask(projectIdentifier, projectTask);
@@ -61,11 +61,11 @@ public class BackLogController {
 
     }
 
-    @PatchMapping(value = "/{projectID}/{projectTaskSeq}", produces = "application/json")
-    public ResponseEntity<Object> updateProjectTask(@RequestBody ProjectTask projectTask, BindingResult result,
-                                                    @PathVariable String projectID, @PathVariable String projectTaskSeq) {
+    @PatchMapping(value = "/{projectID}/{projectTaskSeq}")
+    public ResponseEntity<?> updateProjectTask(@Valid @RequestBody ProjectTask projectTask, BindingResult result,
+                                               @PathVariable String projectID, @PathVariable String projectTaskSeq) {
 
-        ResponseEntity<Object> errorMap = mapValidationErrorService.validateError(result);
+        ResponseEntity<?> errorMap = mapValidationErrorService.validateError(result);
         if (null != errorMap) return errorMap;
 
         ProjectTask updatedTask = projectTaskService.updateProjectTaskByProjectSequence(projectTask, projectID, projectTaskSeq);

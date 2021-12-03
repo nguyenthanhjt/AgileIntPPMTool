@@ -9,8 +9,8 @@ import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static io.agileintelligence.ppmtool.constants.CommonCoreContants.BLANK;
-import static io.agileintelligence.ppmtool.constants.CommonCoreContants.MINUS;
+import static io.agileintelligence.ppmtool.constants.CommonCoreConstants.BLANK;
+import static io.agileintelligence.ppmtool.constants.CommonCoreConstants.MINUS;
 
 @Service
 public class ProjectTaskService {
