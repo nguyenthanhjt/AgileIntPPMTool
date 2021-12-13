@@ -10,8 +10,8 @@ import {
 import Moment from "moment";
 
 class UpdateProjectTask extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       id: "",
@@ -23,7 +23,7 @@ class UpdateProjectTask extends Component {
       dueDate: "",
       projectIdentifier: "",
       createAt: "",
-      errors: {},
+      errors: {}
     };
 
     this.onChange = this.onChange.bind(this);
@@ -88,8 +88,8 @@ class UpdateProjectTask extends Component {
     };
 
     this.props.updateProjectTask(
-      this.props.match.params.projectID, // this.state.projectIdentifier,
-      this.props.projectTask.projectSequence, // this.state.projectSequence,
+      this.state.projectIdentifier, //this.props.match.params.projectID, // 
+      this.state.projectSequence, // this.props.projectTask.projectSequence, // 
       updateProjectTask,
       this.props.history
     );

@@ -1,7 +1,33 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { deleteProjectTask } from "../../../actions/backlogActions";
+import propTypes from "prop-types";
+import { connect } from "react-redux";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css";
 
 class ProjectTask extends Component {
+  deleteSubmit(projectID, projectTaskSeq) {
+    confirmAlert({
+      title: "Confirm to submit",
+      message: `Are you sure to delete this project task with ID: ${projectTaskSeq}`,
+      buttons: [
+        {
+          label: "Yes",
+          onClick: this.props.deleteProjectTask(projectID, projectTaskSeq),
+        },
+        {
+          label: "No",
+          onClick: () => {},
+        },
+      ],
+    });
+  }
+
+  onDeleteClick(projectID, projectTaskSeq) {
+    this.props.deleteProjectTask(projectID, projectTaskSeq);
+  }
+
   render() {
     const { projectTask } = this.props;
     let priorityString;
@@ -37,12 +63,37 @@ class ProjectTask extends Component {
           <Link
             to={`/update-project-task/${projectTask.projectIdentifier}/${projectTask.projectSequence}`}
             className="btn btn-primary"
-          >Update
+          >
+            Update
           </Link>
-          <button className="btn btn-danger ml-4">Delete</button>
+          <button
+            className="btn btn-danger ml-4"
+            onClick={this.onDeleteClick.bind(
+              this,
+              projectTask.projectIdentifier,
+              projectTask.projectSequence
+            )}
+          >
+            Delete
+          </button>
+          <button
+            className="btn btn-danger ml-4"
+            onClick={this.deleteSubmit.bind(
+              this,
+              projectTask.projectIdentifier,
+              projectTask.projectSequence
+            )}
+          >
+            Delete pop up
+          </button>
         </div>
       </div>
     );
   }
 }
-export default ProjectTask;
+
+ProjectTask.propTypes = {
+  deleteProjectTask: propTypes.func.isRequired,
+};
+
+export default connect(null, { deleteProjectTask })(ProjectTask);
