@@ -25,8 +25,14 @@ export default function backLogActions(state = initialState, action) {
     case DELETE_PROJECT_TASK:
       return {
         ...state,
-        
+
         // TODO: implement logic here
+        // after delete ProjecTask: do filter() to remove the deleted ProjecTask in ProjectBoard 
+        // with projectTaskSeq(setting in backLogReducer.js deleteProjectTask function) in payload:
+        // compare it to projectTask.projectTaskSeq of projectTaskList in state
+        projectTasks: state.projectTasks.filter(
+          (projectTask) => projectTask.projectSequence !== action.payload
+        ),
       };
 
     default:
