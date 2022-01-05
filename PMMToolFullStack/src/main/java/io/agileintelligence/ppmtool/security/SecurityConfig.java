@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg",
                         "/**/*.html", "/**/*.css", "/**/*.js"
                 ).permitAll()
+                .antMatchers("/api/users/**").permitAll()
                 .anyRequest().authenticated(); // Anything other than above config, need to have authentication
     }
 }
