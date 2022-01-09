@@ -25,6 +25,7 @@ public class User implements UserDetails {
     @NotBlank(message = "Please enter your full name")
     private String fullName;
 
+    //TODO User regular expressions to check valid password chars,number, special chars ...
     @NotBlank(message = "Password field is required")
     private String password;
 

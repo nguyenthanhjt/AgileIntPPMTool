@@ -29,4 +29,10 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         ApplicationCheckedExceptionResponse exceptionResponse = new ApplicationCheckedExceptionResponse(e.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<?> handleUserAlreadyExistsException(UserNameAlreadyExistedException e, WebRequest request) {
+        UserNameAlreadyExistedExceptionResponse exceptionResponse = new UserNameAlreadyExistedExceptionResponse(e.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }
