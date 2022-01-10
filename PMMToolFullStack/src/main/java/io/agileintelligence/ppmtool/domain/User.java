@@ -30,6 +30,8 @@ public class User implements UserDetails {
     private String password;
 
     @Transient
+    // @JsonIgnore : if we use this, it will compare password to confirmation password,
+    // so we cannot set the confirmation password to BLANK to hide it in API result.
     private String confirmationPassword;
 
     // One to many with Project

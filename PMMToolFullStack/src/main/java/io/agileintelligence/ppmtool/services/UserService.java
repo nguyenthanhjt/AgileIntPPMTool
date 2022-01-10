@@ -1,5 +1,6 @@
 package io.agileintelligence.ppmtool.services;
 
+import io.agileintelligence.ppmtool.constants.CommonCoreConstants;
 import io.agileintelligence.ppmtool.domain.User;
 import io.agileintelligence.ppmtool.exceptions.ApplicationCheckedException;
 import io.agileintelligence.ppmtool.exceptions.UserNameAlreadyExistedException;
@@ -29,6 +30,8 @@ public class UserService {
 
             // Make sure password and confirm password are matched
             // Don't persist or show the confirmation password
+            newUser.setConfirmationPassword(CommonCoreConstants.BLANK);
+
             return userRepository.save(newUser);
 
         } catch (ConstraintViolationException ex) {
