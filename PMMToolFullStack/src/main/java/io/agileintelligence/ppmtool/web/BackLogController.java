@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping(value = "/api/backlog",
@@ -45,8 +46,8 @@ public class BackLogController {
     }
 
     @GetMapping("/get-backlog/{projectIdentifier}")
-    public Iterable<ProjectTask> getProjectBackLog(@PathVariable String projectIdentifier) {
-        Project project = projectService.findProjectByIdentifier(projectIdentifier);
+    public Iterable<ProjectTask> getProjectBackLog(@PathVariable String projectIdentifier, Principal principal) {
+        Project project = projectService.findProjectByIdentifier(projectIdentifier, principal.getName());
 
         return projectTaskService.findBackLogByProjectID(project.getProjectIdentifier());
 
