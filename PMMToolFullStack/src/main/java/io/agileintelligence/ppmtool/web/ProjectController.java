@@ -35,11 +35,11 @@ public class ProjectController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> updateProject(@Valid @RequestBody Project project, BindingResult result) {
+    public ResponseEntity<?> updateProject(@Valid @RequestBody Project project, BindingResult result, Principal principal) {
         ResponseEntity<?> errorMap = validationErrorService.validateError(result);
         if (errorMap != null) return errorMap;
 
-        projectService.updateProject(project);
+        projectService.updateProject(project, principal.getName());
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 

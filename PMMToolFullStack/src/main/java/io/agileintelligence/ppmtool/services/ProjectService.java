@@ -50,11 +50,17 @@ public class ProjectService {
         }
     }
 
-    public Project updateProject(Project project) {
+    public Project updateProject(Project project, String username) {
         Project currentProject = projectRepository.findByProjectIdentifier(project.getProjectIdentifier());
         if (currentProject == null) {
-            throw new ProjectIdException("Project Id '" + project.getProjectIdentifier() + "' does not exists.");
+            throw new ProjectNotFoundException("Project with ID '" + project.getProjectIdentifier() + "' does not exists.");
+        } else if (!currentProject.getUser().getUsername().equals(username)) {
+            throw new ProjectNotFoundException("Project not found in your account");
         }
+        // Setting information that can not be changed:
+        project.setBackLog(currentProject.getBackLog());
+        project.setCreatedAt(currentProject.getCreatedAt());
+        project.setUser(currentProject.getUser());
         project.setBackLog(backlogRepository.findByProjectIdentifier(project.getProjectIdentifier().toUpperCase()));
 
         return projectRepository.save(project);
