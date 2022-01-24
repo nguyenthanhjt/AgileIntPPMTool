@@ -1,10 +1,12 @@
 package io.agileintelligence.ppmtool.services;
 
 import io.agileintelligence.ppmtool.domain.BackLog;
+import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.exceptions.ApplicationCheckedException;
 import io.agileintelligence.ppmtool.exceptions.ProjectNotFoundException;
 import io.agileintelligence.ppmtool.repository.BacklogRepository;
+import io.agileintelligence.ppmtool.repository.ProjectRepository;
 import io.agileintelligence.ppmtool.repository.ProjectTaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,46 +22,61 @@ public class ProjectTaskService {
     @Autowired
     private BacklogRepository backlogRepository;
 
-    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask) {
+    @Autowired
+    private ProjectService projectService;
 
-        // PTs to be added to a specific Project, project != null: existed project and BackLog also exists
-        BackLog backLog = backlogRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
+    @Autowired
+    private ProjectRepository projectRepository;
 
-        // Exceptions: Project not found
-        if (backLog == null) {
-            throw new ProjectNotFoundException("Project with ID: " + projectIdentifier + " not found.");
+    public ProjectTask addProjectTask(String projectIdentifier, ProjectTask projectTask, String username) {
+
+        try {
+            // PTs to be added to a specific Project, project != null: existed project and BackLog also exists
+            // BackLog backLog = backlogRepository.findByProjectIdentifier(projectIdentifier.toUpperCase());
+            BackLog backLog = projectService.findProjectByIdentifier(projectIdentifier, username).getBackLog();
+
+            // Exceptions: Project not found
+            if (backLog == null) {
+                throw new ProjectNotFoundException("Project with ID: " + projectIdentifier + " not found.");
+            }
+            // set the BackLog to the ProjectTask: => projectSequence ???
+            projectTask.setBackLog(backLog);
+
+            // We want project sequence to be like this: IDPRO-1  IDPRO-2 ... 100 101
+            Integer backLogSeq = backLog.getPTSequence();
+            // Update the BackLog Sequence:
+            backLogSeq++;
+
+            backLog.setPTSequence(backLogSeq);
+
+            // Add seq to the project task
+            projectTask.setProjectSequence(projectIdentifier + MINUS + backLogSeq);
+            projectTask.setProjectIdentifier(projectIdentifier);
+
+            // In the future we need to projectTask.getPriority == 0 to handle to UI Form
+            // Initial priority: when priority is null (low-medium-high => to group task by priority)
+            if (projectTask.getPriority() == null || projectTask.getPriority() == 0) {
+                projectTask.setPriority(3);
+            }
+
+            // Initial Status when status is null
+            if (null == projectTask.getStatus() || BLANK.equals(projectTask.getStatus())) {
+                projectTask.setStatus("TO_DO");
+            }
+
+            return projectTaskRepository.save(projectTask);
+        } catch (Exception e) {
+            throw new ApplicationCheckedException(e.getMessage());
         }
-        // set the BackLog to the ProjectTask: => projectSequence ???
-        projectTask.setBackLog(backLog);
-
-        // We want project sequence to be like this: IDPRO-1  IDPRO-2 ... 100 101
-        Integer backLogSeq = backLog.getPTSequence();
-        // Update the BackLog Sequence:
-        backLogSeq++;
-
-        backLog.setPTSequence(backLogSeq);
-
-        // Add seq to the project task
-        projectTask.setProjectSequence(projectIdentifier + MINUS + backLogSeq);
-        projectTask.setProjectIdentifier(projectIdentifier);
-
-        // In the future we need to projectTask.getPriority == 0 to handle to UI Form
-        // Initial priority: when priority is null (low-medium-high => to group task by priority)
-        if (projectTask.getPriority() == 0 || projectTask.getPriority() == null) {
-            projectTask.setPriority(3);
-        }
-
-        // Initial Status when status is null
-        if (null == projectTask.getStatus() || BLANK.equals(projectTask.getStatus())) {
-            projectTask.setStatus("TO_DO");
-        }
-
-        return projectTaskRepository.save(projectTask);
 
 
     }
 
     public Iterable<ProjectTask> findBackLogByProjectID(String id) {
+        Project project = projectRepository.findByProjectIdentifier(id);
+
+        if (null == project) throw new ProjectNotFoundException(" Project with ID: " + id + " does not exist.");
+
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 

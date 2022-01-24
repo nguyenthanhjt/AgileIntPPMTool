@@ -1,6 +1,5 @@
 package io.agileintelligence.ppmtool.web;
 
-import io.agileintelligence.ppmtool.domain.Project;
 import io.agileintelligence.ppmtool.domain.ProjectTask;
 import io.agileintelligence.ppmtool.services.MapValidationErrorService;
 import io.agileintelligence.ppmtool.services.ProjectService;
@@ -36,20 +35,20 @@ public class BackLogController {
 
     @PostMapping("/{projectIdentifier}")
     public ResponseEntity<?> addProjectTaskToBackLog(@Valid @RequestBody ProjectTask projectTask,
-                                                     BindingResult bindingResult, @PathVariable String projectIdentifier) {
+                                                     BindingResult bindingResult, @PathVariable String projectIdentifier, Principal principal) {
         ResponseEntity<?> errorMap = mapValidationErrorService.validateError(bindingResult);
         if (errorMap != null) return errorMap;
 
-        ProjectTask projectTask1 = projectTaskService.addProjectTask(projectIdentifier, projectTask);
+        ProjectTask projectTask1 = projectTaskService.addProjectTask(projectIdentifier, projectTask, principal.getName());
 
         return new ResponseEntity<>(projectTask1, HttpStatus.CREATED);
     }
 
     @GetMapping("/get-backlog/{projectIdentifier}")
     public Iterable<ProjectTask> getProjectBackLog(@PathVariable String projectIdentifier, Principal principal) {
-        Project project = projectService.findProjectByIdentifier(projectIdentifier, principal.getName());
+        projectService.findProjectByIdentifier(projectIdentifier, principal.getName());
 
-        return projectTaskService.findBackLogByProjectID(project.getProjectIdentifier());
+        return projectTaskService.findBackLogByProjectID(projectIdentifier);
 
     }
 
