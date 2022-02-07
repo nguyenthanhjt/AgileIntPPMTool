@@ -80,12 +80,14 @@ public class ProjectTaskService {
         return projectTaskRepository.findByProjectIdentifierOrderByPriority(id);
     }
 
-    public ProjectTask findProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID) {
-        // Ensure: searching on the right backlog
+    public ProjectTask findProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID, String username) {
+        /* Ensure: searching on the right backlog
         BackLog backLog = backlogRepository.findByProjectIdentifier(projectID);
         if (null == backLog) {
             throw new ProjectNotFoundException(" Project with ID : '" + projectID + "' does not exist.");
-        }
+        }*/
+
+        projectService.findProjectByIdentifier(projectID, username);
 
         // make sure that our project task exists
         ProjectTask projectTask = projectTaskRepository.findByProjectSequence(projectTaskSequenceID);
@@ -94,7 +96,7 @@ public class ProjectTaskService {
         }
 
         // make sure that the backlog/project id in the path corresponds to the right project
-        if (!projectTask.getBackLog().getProjectIdentifier().equals(backLog.getProjectIdentifier())) {
+        if (!projectTask.getBackLog().getProjectIdentifier().equals(projectID)) {
             throw new ApplicationCheckedException(" Project Task with ID '" + projectTaskSequenceID + "' do not exist in Project with ID '" + projectID + "'");
         }
 
@@ -102,18 +104,19 @@ public class ProjectTaskService {
         return projectTask;
     }
 
-    public ProjectTask updateProjectTaskByProjectSequence(ProjectTask updatedProjectTask, String projectID, String projectTaskSequenceID) {
+    public ProjectTask updateProjectTaskByProjectSequence(ProjectTask updatedProjectTask, String projectID, String projectTaskSequenceID, String username) {
         // Validation: exist and consistency
-        ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
+        ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID, username);
         updatedProjectTask.setId(projectTask.getId());
         updatedProjectTask.setBackLog(projectTask.getBackLog());
+        updatedProjectTask.setCreateAt(projectTask.getCreateAt());
 
         return projectTaskRepository.save(updatedProjectTask);
     }
 
-    public void deleteProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID) {
+    public void deleteProjectTaskByProjectSequence(String projectID, String projectTaskSequenceID, String username) {
         // Validation:
-        ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID);
+        ProjectTask projectTask = findProjectTaskByProjectSequence(projectID, projectTaskSequenceID, username);
 
         projectTaskRepository.deleteById(projectTask.getId());
     }
